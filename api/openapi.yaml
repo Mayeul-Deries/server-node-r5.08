@@ -1,0 +1,914 @@
+openapi: 3.0.2
+info:
+  title: MontSki API
+  description: Le magasin de location de ski MontSki situé à Chamrousse souhaite réaliser
+    une API pour la gestion des locations de matériel de ski.
+  contact:
+    name: Deries Mayeul
+    email: mayeul.deries@etu.univ-grenoble-alpes.fr
+  version: 1.0.0
+servers:
+- url: https://localhost:8080/
+paths:
+  /:
+    get:
+      tags:
+      - Magasin
+      summary: Liste les informations du magasin
+      operationId: rootGET
+      parameters: []
+      responses:
+        "200":
+          description: Le magasin est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-swagger-router-controller: Magasin
+  /produits/:
+    get:
+      tags:
+      - Produit
+      summary: Liste tous les produits du magasin
+      operationId: produitsGET
+      parameters:
+      - name: limit
+        in: query
+        description: Nombre maximum d'éléments à retourner.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          description: La liste des produits est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+      x-swagger-router-controller: Produit
+    post:
+      tags:
+      - Produit
+      summary: Ajoute un nouveau produit au magasin
+      operationId: produitsPOST
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduitWithLinks'
+      responses:
+        "200":
+          description: Le produit a été ajouté avec succès
+      x-swagger-router-controller: Produit
+  /produits/{idProduit}/:
+    get:
+      tags:
+      - Produit
+      summary: Retourne un produit en fonction de l'id du produit
+      operationId: produitsIdProduitGET
+      parameters:
+      - name: idProduit
+        in: path
+        description: L'id du produit
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Un unique produit est retourné
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProduitWithLinks'
+        "404":
+          description: L'id ne correspond à aucun produit
+      x-swagger-router-controller: Produit
+    put:
+      tags:
+      - Produit
+      summary: Met à jour les informations d'un produit spécifié par son id
+      operationId: produitsIdProduitPUT
+      parameters:
+      - name: idProduit
+        in: path
+        description: L'id du produit à mettre à jour
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Produit'
+      responses:
+        "200":
+          description: Les informations du produit ont été mises à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProduitWithLinks'
+        "404":
+          description: L'id ne correspond à aucun produit
+      x-swagger-router-controller: Produit
+    delete:
+      tags:
+      - Produit
+      summary: Supprime un produit spécifié par son id du magasin
+      operationId: produitsIdProduitDELETE
+      parameters:
+      - name: idProduit
+        in: path
+        description: L'id du produit à supprimer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Le produit a été supprimé du magasin avec succès
+        "404":
+          description: L'id ne correspond à aucun produit
+      x-swagger-router-controller: Produit
+  /produits/{idProduit}/categorie:
+    get:
+      tags:
+      - Produit
+      summary: Retourne la catégorie d'un produit en fonction de l'id du produit
+      operationId: produitsIdProduitCategorieGET
+      parameters:
+      - name: idProduit
+        in: path
+        description: L'id du produit
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: La catégorie du produit est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "404":
+          description: L'id ne correspond à aucun produit
+      x-swagger-router-controller: Produit
+  /clients/:
+    get:
+      tags:
+      - Client
+      summary: Liste tous les clients du magasin
+      operationId: clientsGET
+      parameters: []
+      responses:
+        "200":
+          description: La liste des clients est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      x-swagger-router-controller: Client
+    post:
+      tags:
+      - Client
+      summary: Ajoute un nouveau client
+      operationId: clientsPOST
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientWithLinks'
+      responses:
+        "200":
+          description: Le client a été ajouté avec succès
+      x-swagger-router-controller: Client
+  /clients/{idClient}:
+    get:
+      tags:
+      - Client
+      summary: Retourne un client spécifié par son id
+      operationId: clientsIdClientGET
+      parameters:
+      - name: idClient
+        in: path
+        description: L'id du client à récupérer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Un unique client est retourné
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientWithLinks'
+        "404":
+          description: L'id ne correspond à aucun client
+      x-swagger-router-controller: Client
+    put:
+      tags:
+      - Client
+      summary: Met à jour les informations d'un client spécifié par son id
+      operationId: clientsIdClientPUT
+      parameters:
+      - name: idClient
+        in: path
+        description: l'id du client à mettre à jour
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        "200":
+          description: Les détails du client ont été mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientWithLinks'
+        "404":
+          description: L'id ne correspond à aucun client
+      x-swagger-router-controller: Client
+    delete:
+      tags:
+      - Client
+      summary: Supprime un client spécifié par son id
+      operationId: clientsIdClientDELETE
+      parameters:
+      - name: idClient
+        in: path
+        description: L'id du client à supprimer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Le client a été supprimé du magasin avec succès
+        "404":
+          description: L'id ne correspond à aucun client
+      x-swagger-router-controller: Client
+  /clients/{idClient}/location:
+    get:
+      tags:
+      - Client
+      summary: Retourne la location associée à un client spécifié par son id
+      operationId: clientsIdClientLocationGET
+      parameters:
+      - name: idClient
+        in: path
+        description: L'id du client
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: La location associée au client est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_4'
+        "404":
+          description: L'id ne correspond à aucun client ou le client n'a pas de location
+            associée
+      x-swagger-router-controller: Client
+  /locations/:
+    get:
+      tags:
+      - Location
+      summary: Liste toutes les locations enregistrées
+      operationId: locationsGET
+      parameters: []
+      responses:
+        "200":
+          description: La liste des locations est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
+      x-swagger-router-controller: Location
+    post:
+      tags:
+      - Location
+      summary: Enregistre une nouvelle location
+      operationId: locationsPOST
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationWithLinks'
+      responses:
+        "200":
+          description: La location a été enregistrée avec succès
+      x-swagger-router-controller: Location
+  /locations/{idLocation}/:
+    get:
+      tags:
+      - Location
+      summary: Retourne une les détails d'une location spécifiée par son id
+      operationId: locationsIdLocationGET
+      parameters:
+      - name: idLocation
+        in: path
+        description: L'id de la location à afficher
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Les détails d'une unique location sont retournés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationWithLinks'
+        "404":
+          description: L'id ne correspond à aucune location
+      x-swagger-router-controller: Location
+    put:
+      tags:
+      - Location
+      summary: Met à jour les informations d'une location spécifiée par son id
+      operationId: locationsIdLocationPUT
+      parameters:
+      - name: idLocation
+        in: path
+        description: L'id de la location à mettre à jour
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        "200":
+          description: Les détails de la location ont été mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationWithLinks'
+        "404":
+          description: L'id ne correspond à aucune location
+      x-swagger-router-controller: Location
+    delete:
+      tags:
+      - Location
+      summary: Supprime une location spécifiée par son id
+      operationId: locationsIdLocationDELETE
+      parameters:
+      - name: idLocation
+        in: path
+        description: L'id de la location à supprimer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: La location a été supprimée avec succès
+        "404":
+          description: L'id ne correspond à aucune location
+      x-swagger-router-controller: Location
+  /locations/{idLocation}/produits:
+    get:
+      tags:
+      - Location
+      summary: Liste les produits loués pour une location spécifiée par son id
+      operationId: locationsIdLocationProduitsGET
+      parameters:
+      - name: idLocation
+        in: path
+        description: L'id de la location dont on veut afficher les produits
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: La liste des produits loués pour la location est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "404":
+          description: L'id ne correspond à aucune location
+      x-swagger-router-controller: Location
+  /locations/{idLocation}/client:
+    get:
+      tags:
+      - Location
+      summary: Retourne le client associé à une location spécifiée par son id
+      operationId: locationsIdLocationClientGET
+      parameters:
+      - name: idLocation
+        in: path
+        description: L'id de la location
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Le client associé à la location est retourné
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_7'
+        "404":
+          description: L'id ne correspond à aucune location
+      x-swagger-router-controller: Location
+  /categories/:
+    get:
+      tags:
+      - Categorie
+      summary: Liste toutes les catégories de produits du magasin
+      operationId: categoriesGET
+      parameters: []
+      responses:
+        "200":
+          description: La liste des catégories est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_8'
+      x-swagger-router-controller: Categorie
+    post:
+      tags:
+      - Categorie
+      summary: Ajoute une nouvelle catégorie de produit
+      operationId: categoriesPOST
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategorieWithLinks'
+      responses:
+        "200":
+          description: La catégorie a été ajoutée avec succès
+      x-swagger-router-controller: Categorie
+  /categories/{idCategorie}/:
+    get:
+      tags:
+      - Categorie
+      summary: Retourne les détails d'une catégorie spécifiée par son id
+      operationId: categoriesIdCategorieGET
+      parameters:
+      - name: idCategorie
+        in: path
+        description: L'id de la catégorie à récupérer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Les détails d'une unique catégorie sont retournés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategorieWithLinks'
+        "404":
+          description: L'ID ne correspond à aucune catégorie
+      x-swagger-router-controller: Categorie
+    put:
+      tags:
+      - Categorie
+      summary: Met à jour les informations d'une catégorie spécifiée par son id
+      operationId: categoriesIdCategoriePUT
+      parameters:
+      - name: idCategorie
+        in: path
+        description: L'id de la catégorie à mettre à jour
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Categorie'
+      responses:
+        "200":
+          description: Les détails de la catégorie ont été mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategorieWithLinks'
+        "404":
+          description: L'id ne correspond à aucune catégorie
+      x-swagger-router-controller: Categorie
+    delete:
+      tags:
+      - Categorie
+      summary: Supprime une catégorie spécifiée par son id
+      operationId: categoriesIdCategorieDELETE
+      parameters:
+      - name: idCategorie
+        in: path
+        description: L'id de la catégorie à supprimer
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: La catégorie a été supprimée avec succès
+        "404":
+          description: L'id ne correspond à aucune catégorie
+      x-swagger-router-controller: Categorie
+  /categories/{idCategorie}/produits:
+    get:
+      tags:
+      - Categorie
+      summary: Liste les produits associés à une catégorie spécifiée par son id
+      operationId: categoriesIdCategorieProduitsGET
+      parameters:
+      - name: idCategorie
+        in: path
+        description: L'id de la catégorie
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: La liste des produits associés à la catégorie est retournée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_6'
+        "404":
+          description: L'id ne correspond à aucune catégorie
+      x-swagger-router-controller: Categorie
+components:
+  schemas:
+    MagasinWithLinks:
+      description: Schéma représentant un magasin avec des liens
+      allOf:
+      - $ref: '#/components/schemas/Magasin'
+      - type: object
+        properties:
+          _id:
+            type: string
+          _links:
+            $ref: '#/components/schemas/Links'
+    Magasin:
+      type: object
+      properties:
+        nom:
+          type: string
+        adresse:
+          type: string
+    ClientWithLinks:
+      description: Schéma représentant un client avec des liens
+      allOf:
+      - $ref: '#/components/schemas/Client'
+      - type: object
+        properties:
+          _id:
+            type: string
+          _links:
+            $ref: '#/components/schemas/Links'
+    Client:
+      type: object
+      properties:
+        idClient:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        numTel:
+          type: string
+        idLocation:
+          type: integer
+    ProduitWithLinks:
+      description: Schéma représentant un produit avec des liens
+      allOf:
+      - $ref: '#/components/schemas/Produit'
+      - type: object
+        properties:
+          _id:
+            type: string
+          _links:
+            $ref: '#/components/schemas/Links'
+    Produit:
+      type: object
+      properties:
+        idProduit:
+          type: integer
+        nom:
+          type: string
+        etat:
+          type: string
+          enum:
+          - neuf
+          - bon état
+          - passable
+          - abimé
+        disponibilite:
+          type: string
+          enum:
+          - disponible
+          - déjà loué
+        idCategorie:
+          type: integer
+    LocationWithLinks:
+      description: Schéma représentant un document avec des liens
+      allOf:
+      - $ref: '#/components/schemas/Categorie'
+      - type: object
+        properties:
+          _id:
+            type: string
+          _links:
+            $ref: '#/components/schemas/Links'
+    Location:
+      type: object
+      properties:
+        idLocation:
+          type: integer
+        idClientAssocié:
+          type: integer
+        idProduitsLoués:
+          type: array
+          items:
+            type: integer
+        dateDebut:
+          type: string
+          format: date
+        dateFin:
+          type: string
+          format: date
+    CategorieWithLinks:
+      description: Schéma représentant un categorie avec des liens
+      allOf:
+      - $ref: '#/components/schemas/Categorie'
+      - type: object
+        properties:
+          _id:
+            type: string
+          _links:
+            $ref: '#/components/schemas/Links'
+    Categorie:
+      type: object
+      properties:
+        idCategorie:
+          type: integer
+        nom:
+          type: string
+        description:
+          type: string
+        nombreProduits:
+          type: integer
+    Links:
+      type: array
+      description: Schéma représentant des liens
+      items:
+        $ref: '#/components/schemas/Links_inner'
+    inline_response_200:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/MagasinWithLinks'
+      example:
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+        users:
+        - ""
+        - ""
+    inline_response_200_1:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProduitWithLinks'
+      example:
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+        users:
+        - ""
+        - ""
+    inline_response_200_2:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategorieWithLinks'
+      example:
+        projects:
+        - ""
+        - ""
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+    inline_response_200_3:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientWithLinks'
+      example:
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+        users:
+        - ""
+        - ""
+    inline_response_200_4:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationWithLinks'
+      example:
+        projects:
+        - ""
+        - ""
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+    inline_response_200_5:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationWithLinks'
+      example:
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+        users:
+        - ""
+        - ""
+    inline_response_200_6:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProduitWithLinks'
+      example:
+        projects:
+        - ""
+        - ""
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+    inline_response_200_7:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientWithLinks'
+      example:
+        projects:
+        - ""
+        - ""
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+    inline_response_200_8:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/Links'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategorieWithLinks'
+      example:
+        _links:
+        - method: method
+          rel: rel
+          href: href
+        - method: method
+          rel: rel
+          href: href
+        users:
+        - ""
+        - ""
+    Links_inner:
+      type: object
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
+        method:
+          type: string
+      example:
+        method: method
+        rel: rel
+        href: href
+  parameters:
+    limitParam:
+      name: limit
+      in: query
+      description: Nombre maximum d'éléments à retourner.
+      required: false
+      style: form
+      explode: true
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 20

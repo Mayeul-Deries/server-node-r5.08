@@ -1,0 +1,210 @@
+{
+  "magasin": {
+    "nom": "Magasin MontSki",
+    "adresse": "18 Place de Belledone, 38410 Chamrousse",
+    "produits": [
+      {
+        "idProduit": 1000,
+        "nom": "Ski Rossignol M4",
+        "etat": "neuf",
+        "disponibilite": "déjà loué",
+        "categorie": 4000
+      },
+      {
+        "idProduit": 1001,
+        "nom": "Dynastar kit Ski xpress 2",
+        "etat": "bon état",
+        "disponibilite": "déjà loué",
+        "categorie": 4000
+      },
+      {
+        "idProduit": 1002,
+        "nom": "Head Ski Alpin 3",
+        "etat": "passable",
+        "disponibilite": "déjà loué",
+        "categorie": 4000
+      },
+      {
+        "idProduit": 1003,
+        "nom": "Salomon Model 1",
+        "etat": "mauvais état",
+        "disponibilite": "disponible",
+        "categorie": 4000
+      },
+      {
+        "idProduit": 1004,
+        "nom": "Atomic M365",
+        "etat": "neuf",
+        "disponibilite": "déjà loué",
+        "categorie": 4000
+      },
+      {
+        "idProduit": 1005,
+        "nom": "Elan Ski Speed 6",
+        "etat": "bon état",
+        "disponibilite": "déjà loué",
+        "categorie": 4000
+      },
+      {
+        "idProduit": 1006,
+        "nom": "Volkl Snowboard S",
+        "etat": "passable",
+        "disponibilite": "déjà loué",
+        "categorie": 4001
+      },
+      {
+        "idProduit": 1007,
+        "nom": "Loubsol Snowboard Mo5",
+        "etat": "neuf",
+        "disponibilite": "disponible",
+        "categorie": 4001
+      },
+      {
+        "idProduit": 1008,
+        "nom": "Snowboard Shape V2",
+        "etat": "bon état",
+        "disponibilite": "disponible",
+        "categorie": 4001
+      },
+      {
+        "idProduit": 1009,
+        "nom": "Luge turbo v2",
+        "etat": "bon état",
+        "disponibilite": "disponible",
+        "categorie": 4002
+      }
+    ],
+    "clients": [
+      {
+        "idClient": 2000,
+        "nom": "Dupont",
+        "prenom": "Jean",
+        "telephone": "0678543145",
+        "locations": 3000
+      },
+      {
+        "idClient": 2001,
+        "nom": "Lefevre",
+        "prenom": "Sophie",
+        "telephone": "0798541235",
+        "locations": 3001
+      },
+      {
+        "idClient": 2002,
+        "nom": "Dubois",
+        "prenom": "Marie",
+        "telephone": "0622365569",
+        "locations": 3002
+      },
+      {
+        "idClient": 2003,
+        "nom": "Marti",
+        "prenom": "Antoine",
+        "numTel": "0789456123",
+        "locations": 3003
+      },
+      {
+        "idClient": 2004,
+        "nom": "Leroux",
+        "prenom": "Emma",
+        "numTel": "0612345678",
+        "locations": 3004
+      },
+      {
+        "idClient": 2005,
+        "nom": "Garcia",
+        "prenom": "Lucas",
+        "numTel": "0798745632",
+        "locations": 3005
+      },
+      {
+        "idClient": 2006,
+        "nom": "Moreau",
+        "prenom": "Manon",
+        "numTel": "0456943210"
+      },
+      {
+        "idClient": 2007,
+        "nom": "Lambert",
+        "prenom": "Clara",
+        "numTel": "0673412589"
+      },
+      {
+        "idClient": 2008,
+        "nom": "Girard",
+        "prenom": "Hugo",
+        "numTel": "0798878641"
+      },
+      {
+        "idClient": 2009,
+        "nom": "Biaggi",
+        "prenom": "Maxime",
+        "numTel": "0636987412"
+      }
+    ],
+    "locations": [
+      {
+        "idLocation": 3000,
+        "produitLoue": [1000],
+        "clientAssocie": 2000,
+        "dateDebut": "2023-01-01",
+        "dateFin": "2023-01-07"
+      },
+      {
+        "idLocation": 3001,
+        "produitLoue": [1001],
+        "clientAssocie": 2001,
+        "dateDebut": "2023-02-15",
+        "dateFin": "2023-02-20"
+      },
+      {
+        "idLocation": 3002,
+        "produitLoue": [1002],
+        "clientAssocie": 2002,
+        "dateDebut": "2023-01-10",
+        "dateFin": "2023-01-11"
+      },
+      {
+        "idLocation": 3003,
+        "produitLoue": [1003],
+        "clientAssocie": 2003,
+        "dateDebut": "2023-02-06",
+        "dateFin": "2023-02-09"
+      },
+      {
+        "idLocation": 3004,
+        "produitLoue": [1004,1005],
+        "clientAssocie": 2004,
+        "dateDebut": "2023-02-12",
+        "dateFin": "2023-02-14"
+      },
+      {
+        "idLocation": 3005,
+        "produitLoue": [1006, 1007],
+        "clientAssocie": 2005,
+        "dateDebut": "2023-01-26",
+        "dateFin": "2023-01-30"
+      }
+    ],
+    "categories": [
+      {
+        "idCategorie": 4000,
+        "nomCategorie": "Skis",
+        "description": "Ensemble de skis de différentes marques et modèles",
+        "nombreProduits": 6
+      },
+      {
+        "idCategorie": 4001,
+        "nomCategorie": "Snowboards",
+        "description": "Ensemble de snowboards de différentes marques et modèles",
+        "nombreProduits": 3
+      },
+      {
+        "idCategorie": 4002,
+        "nomCategorie": "Luges",
+        "description": "Ensemble de luges",
+        "nombreProduits": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,713 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: MontSki API
+  description: Le magasin de location de ski MontSki situé à Chamrousse souhaite réaliser une API pour la gestion des locations de matériel de ski.
+  contact:
+    name: Deries Mayeul
+    email: mayeul.deries@etu.univ-grenoble-alpes.fr
+servers:
+  - url: https://localhost:8080/
+paths:
+  /:
+    get:
+      tags:
+        - Magasin
+      summary: Liste les informations du magasin
+      parameters: []
+      responses:
+        "200":
+          description: Le magasin est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MagasinWithLinks"
+  /produits/:
+    get:
+      tags:
+        - Produit
+      summary: Liste tous les produits du magasin
+      parameters:
+        - $ref: "#/components/parameters/limitParam"
+      responses:
+        "200":
+          description: La liste des produits est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProduitWithLinks"
+    post:
+      tags:
+        - Produit
+      summary: Ajoute un nouveau produit au magasin
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProduitWithLinks"
+      responses:
+        "200":
+          description: Le produit a été ajouté avec succès
+
+  /produits/{idProduit}/:
+    get:
+      tags:
+        - Produit
+      summary: Retourne un produit en fonction de l'id du produit
+      parameters:
+        - name: idProduit
+          in: path
+          description: L'id du produit
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Un unique produit est retourné
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProduitWithLinks"
+        "404":
+          description: L'id ne correspond à aucun produit
+    put:
+      tags:
+        - Produit
+      summary: Met à jour les informations d'un produit spécifié par son id
+      parameters:
+        - name: idProduit
+          in: path
+          description: L'id du produit à mettre à jour
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Produit"
+      responses:
+        "200":
+          description: Les informations du produit ont été mises à jour
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProduitWithLinks"
+        "404":
+          description: L'id ne correspond à aucun produit
+    delete:
+      tags:
+        - Produit
+      summary: Supprime un produit spécifié par son id du magasin
+      parameters:
+        - name: idProduit
+          in: path
+          description: L'id du produit à supprimer
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Le produit a été supprimé du magasin avec succès
+        "404":
+          description: L'id ne correspond à aucun produit
+
+  /produits/{idProduit}/categorie:
+    get:
+      tags:
+        - Produit
+      summary: Retourne la catégorie d'un produit en fonction de l'id du produit
+      parameters:
+        - name: idProduit
+          in: path
+          description: L'id du produit
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: La catégorie du produit est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CategorieWithLinks"
+        "404":
+          description: L'id ne correspond à aucun produit
+
+  /clients/:
+    get:
+      tags:
+        - Client
+      summary: Liste tous les clients du magasin
+      parameters: []
+      responses:
+        "200":
+          description: La liste des clients est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ClientWithLinks"
+    post:
+      tags:
+        - Client
+      summary: Ajoute un nouveau client
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientWithLinks"
+      responses:
+        "200":
+          description: Le client a été ajouté avec succès
+  /clients/{idClient}:
+    get:
+      tags:
+        - Client
+      summary: Retourne un client spécifié par son id
+      parameters:
+        - name: idClient
+          in: path
+          description: L'id du client à récupérer
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Un unique client est retourné
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientWithLinks"
+        "404":
+          description: L'id ne correspond à aucun client
+    put:
+      tags:
+        - Client
+      summary: Met à jour les informations d'un client spécifié par son id
+      parameters:
+        - name: idClient
+          in: path
+          description: l'id du client à mettre à jour
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Client"
+      responses:
+        "200":
+          description: Les détails du client ont été mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientWithLinks"
+        "404":
+          description: L'id ne correspond à aucun client
+    delete:
+      tags:
+        - Client
+      summary: Supprime un client spécifié par son id
+      parameters:
+        - name: idClient
+          in: path
+          description: L'id du client à supprimer
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Le client a été supprimé du magasin avec succès
+        "404":
+          description: L'id ne correspond à aucun client
+  /clients/{idClient}/location:
+    get:
+      tags:
+        - Client
+      summary: Retourne la location associée à un client spécifié par son id
+      parameters:
+        - name: idClient
+          in: path
+          description: L'id du client
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: La location associée au client est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LocationWithLinks"
+        "404":
+          description: L'id ne correspond à aucun client ou le client n'a pas de location associée
+
+  /locations/:
+    get:
+      tags:
+        - Location
+      summary: Liste toutes les locations enregistrées
+      parameters: []
+      responses:
+        "200":
+          description: La liste des locations est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LocationWithLinks"
+    post:
+      tags:
+        - Location
+      summary: Enregistre une nouvelle location
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationWithLinks"
+      responses:
+        "200":
+          description: La location a été enregistrée avec succès
+
+  /locations/{idLocation}/:
+    get:
+      tags:
+        - Location
+      summary: Retourne une les détails d'une location spécifiée par son id
+      parameters:
+        - name: idLocation
+          in: path
+          description: L'id de la location à afficher
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Les détails d'une unique location sont retournés
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationWithLinks"
+        "404":
+          description: L'id ne correspond à aucune location
+    put:
+      tags:
+        - Location
+      summary: Met à jour les informations d'une location spécifiée par son id
+      parameters:
+        - name: idLocation
+          in: path
+          description: L'id de la location à mettre à jour
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Location"
+      responses:
+        "200":
+          description: Les détails de la location ont été mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationWithLinks"
+        "404":
+          description: L'id ne correspond à aucune location
+    delete:
+      tags:
+        - Location
+      summary: Supprime une location spécifiée par son id
+      parameters:
+        - name: idLocation
+          in: path
+          description: L'id de la location à supprimer
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: La location a été supprimée avec succès
+        "404":
+          description: L'id ne correspond à aucune location
+
+  /locations/{idLocation}/produits:
+    get:
+      tags:
+        - Location
+      summary: Liste les produits loués pour une location spécifiée par son id
+      parameters:
+        - name: idLocation
+          in: path
+          description: L'id de la location dont on veut afficher les produits
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: La liste des produits loués pour la location est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProduitWithLinks"
+        "404":
+          description: L'id ne correspond à aucune location
+
+  /locations/{idLocation}/client:
+    get:
+      tags:
+        - Location
+      summary: Retourne le client associé à une location spécifiée par son id
+      parameters:
+        - name: idLocation
+          in: path
+          description: L'id de la location
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Le client associé à la location est retourné
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ClientWithLinks"
+        "404":
+          description: L'id ne correspond à aucune location
+
+  /categories/:
+    get:
+      tags:
+        - Categorie
+      summary: Liste toutes les catégories de produits du magasin
+      parameters: []
+      responses:
+        "200":
+          description: La liste des catégories est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CategorieWithLinks"
+    post:
+      tags:
+        - Categorie
+      summary: Ajoute une nouvelle catégorie de produit
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategorieWithLinks"
+      responses:
+        "200":
+          description: La catégorie a été ajoutée avec succès
+
+  /categories/{idCategorie}/:
+    get:
+      tags:
+        - Categorie
+      summary: Retourne les détails d'une catégorie spécifiée par son id
+      parameters:
+        - name: idCategorie
+          in: path
+          description: L'id de la catégorie à récupérer
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Les détails d'une unique catégorie sont retournés
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategorieWithLinks"
+        "404":
+          description: L'ID ne correspond à aucune catégorie
+    put:
+      tags:
+        - Categorie
+      summary: Met à jour les informations d'une catégorie spécifiée par son id
+      parameters:
+        - name: idCategorie
+          in: path
+          description: L'id de la catégorie à mettre à jour
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Categorie"
+      responses:
+        "200":
+          description: Les détails de la catégorie ont été mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategorieWithLinks"
+        "404":
+          description: L'id ne correspond à aucune catégorie
+    delete:
+      tags:
+        - Categorie
+      summary: Supprime une catégorie spécifiée par son id
+      parameters:
+        - name: idCategorie
+          in: path
+          description: L'id de la catégorie à supprimer
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: La catégorie a été supprimée avec succès
+        "404":
+          description: L'id ne correspond à aucune catégorie
+
+  /categories/{idCategorie}/produits:
+    get:
+      tags:
+        - Categorie
+      summary: Liste les produits associés à une catégorie spécifiée par son id
+      parameters:
+        - name: idCategorie
+          in: path
+          description: L'id de la catégorie
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: La liste des produits associés à la catégorie est retournée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    $ref: "#/components/schemas/Links"
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProduitWithLinks"
+        "404":
+          description: L'id ne correspond à aucune catégorie
+
+components:
+  schemas:
+    MagasinWithLinks:
+      description: Schéma représentant un magasin avec des liens
+      allOf:
+        - $ref: "#/components/schemas/Magasin"
+        - type: object
+          properties:
+            _id:
+              type: string
+            _links:
+              $ref: "#/components/schemas/Links"
+    Magasin:
+      type: object
+      properties:
+        nom:
+          type: string
+        adresse:
+          type: string
+
+    ClientWithLinks:
+      description: Schéma représentant un client avec des liens
+      allOf:
+        - $ref: "#/components/schemas/Client"
+        - type: object
+          properties:
+            _id:
+              type: string
+            _links:
+              $ref: "#/components/schemas/Links"
+    Client:
+      type: object
+      properties:
+        idClient:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        numTel:
+          type: string
+        idLocation:
+          type: integer
+
+    ProduitWithLinks:
+      description: Schéma représentant un produit avec des liens
+      allOf:
+        - $ref: "#/components/schemas/Produit"
+        - type: object
+          properties:
+            _id:
+              type: string
+            _links:
+              $ref: "#/components/schemas/Links"
+    Produit:
+      type: object
+      properties:
+        idProduit:
+          type: integer
+        nom:
+          type: string
+        etat:
+          type: string
+          enum:
+            - neuf
+            - bon état
+            - passable
+            - abimé
+        disponibilite:
+          type: string
+          enum:
+            - disponible
+            - déjà loué
+        idCategorie:
+          type: integer
+
+    LocationWithLinks:
+      description: Schéma représentant un document avec des liens
+      allOf:
+        - $ref: "#/components/schemas/Categorie"
+        - type: object
+          properties:
+            _id:
+              type: string
+            _links:
+              $ref: "#/components/schemas/Links"
+    Location:
+      type: object
+      properties:
+        idLocation:
+          type: integer
+        idClientAssocié:
+          type: integer
+        idProduitsLoués:
+          type: array
+          items:
+            type: integer
+        dateDebut:
+          type: string
+          format: date
+        dateFin:
+          type: string
+          format: date
+
+    CategorieWithLinks:
+      description: Schéma représentant un categorie avec des liens
+      allOf:
+        - $ref: "#/components/schemas/Categorie"
+        - type: object
+          properties:
+            _id:
+              type: string
+            _links:
+              $ref: "#/components/schemas/Links"
+    Categorie:
+      type: object
+      properties:
+        idCategorie:
+          type: integer
+        nom:
+          type: string
+        description:
+          type: string
+        nombreProduits:
+          type: integer
+
+    Links:
+      description: Schéma représentant des liens
+      type: array
+      items:
+        type: object
+        properties:
+          rel:
+            type: string
+          href:
+            type: string
+          method:
+            type: string
+  parameters:
+    limitParam:
+      name: limit
+      in: query
+      description: Nombre maximum d'éléments à retourner.
+      required: false
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+        default: 20
